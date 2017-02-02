@@ -45,9 +45,6 @@
     <ClInclude Include="View\BaseDrawer.h">
       <Filter>Header Files\View</Filter>
     </ClInclude>
-    <ClInclude Include="DrawerFactory.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Controller\DrawerFactory.h">
       <Filter>Header Files\Controller</Filter>
     </ClInclude>
@@ -73,6 +70,27 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="WinapiPainter.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icon_line.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="icon_rect.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\res\ellipse.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\res\line.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\res\rect.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\res\toolbar.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "WinapiPainter.h"
+#include <CommCtrl.h>
 
 #define MAX_LOADSTRING 100
 
@@ -10,12 +11,15 @@
 HINSTANCE hInst;                                // current instance
 WCHAR szTitle[MAX_LOADSTRING];                  // The title bar text
 WCHAR szWindowClass[MAX_LOADSTRING];            // the main window class name
+HIMAGELIST g_hImageList = NULL;
 
 // Forward declarations of functions included in this code module:
 ATOM                MyRegisterClass(HINSTANCE hInstance);
 BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
+
+HWND CreateToolbarFromResource(HWND hWndParent);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -54,8 +58,6 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 
     return (int) msg.wParam;
 }
-
-
 
 //
 //  FUNCTION: MyRegisterClass()
@@ -97,13 +99,26 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Store instance handle in our global variable
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
-      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, nullptr, nullptr, hInstance, nullptr);
+   HWND hWnd = CreateWindowEx(
+	   WS_EX_CLIENTEDGE,
+	   szWindowClass,
+	   szTitle,
+	   WS_OVERLAPPEDWINDOW,
+	   CW_USEDEFAULT,
+	   CW_USEDEFAULT,
+	   640,
+	   480,
+	   NULL,
+	   NULL,
+	   hInstance,
+	   NULL);
 
    if (!hWnd)
    {
       return FALSE;
    }
+
+   CreateToolbarFromResource(hWnd);
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
@@ -153,6 +168,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     case WM_DESTROY:
         PostQuitMessage(0);
         break;
+	case WM_CREATE:
+		
+		break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
@@ -177,4 +195,58 @@ INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     }
     return (INT_PTR)FALSE;
+}
+
+HWND CreateToolbarFromResource(HWND hWndParent)
+{
+	// Declare and initialize local constants.
+	const int ImageListID = 0;
+	const int numButtons = 3;
+	const int bitmapSize = 16;
+
+	const DWORD buttonStyles = BTNS_AUTOSIZE | BTNS_CHECKGROUP;
+
+	// Create the toolbar.
+	HWND hWndToolbar = CreateWindowEx(0, TOOLBARCLASSNAME, NULL,
+		WS_CHILD | TBSTYLE_WRAPABLE, 0, 0, 0, 0,
+		hWndParent, NULL, hInst, NULL);
+	if (hWndToolbar == NULL)
+		return NULL;
+
+	// Create the image list.
+	g_hImageList = ImageList_Create(bitmapSize, bitmapSize, // Dimensions of individual bitmaps.
+		ILC_COLOR16 | ILC_MASK, // Ensures transparent background.
+		numButtons, 0);
+		
+	SendMessage(hWndToolbar, TB_SETIMAGELIST, (WPARAM)ImageListID, (LPARAM)g_hImageList); // Set the image list.
+	SendMessage(hWndToolbar, TB_LOADIMAGES, (WPARAM)IDB_STD_SMALL_COLOR,(LPARAM)HINST_COMMCTRL); // Load the button images.
+
+	// Load the text from a resource.
+	// In the string table, the text for all buttons is a single entry that 
+	// appears as "~New~Open~Save~~". The separator character is arbitrary, 
+	// but it must appear as the first character of the string. The message 
+	// returns the index of the first item, and the items are numbered 
+	// consecutively.
+
+	LRESULT iNew = SendMessage(hWndToolbar, TB_ADDSTRING, (WPARAM)hInst, (LPARAM)IDS_TOOLBAR_TEXT);
+
+	// Initialize button info.
+	// IDM_NEW, IDM_OPEN, and IDM_SAVE are application-defined command constants.
+
+	TBBUTTON tbButtons[numButtons] =
+	{
+		{ MAKELONG(IDI_ICON_LINE,  ImageListID),	ID_DRAW_LINE,  TBSTATE_ENABLED, buttonStyles,{ 0 }, 0, iNew },
+		{ MAKELONG(IDI_ICON_RECT, ImageListID),		ID_DRAW_RECTANGLE, TBSTATE_ENABLED, buttonStyles,{ 0 }, 0, iNew + 1 },
+		{ MAKELONG(IDI_ICON_ELLIPSE, ImageListID),	ID_DRAW_ELLIPSE, TBSTATE_ENABLED, buttonStyles,{ 0 }, 0, iNew + 2 }
+	};
+
+	// Add buttons.
+	SendMessage(hWndToolbar, TB_BUTTONSTRUCTSIZE, (WPARAM)sizeof(TBBUTTON), 0);
+	SendMessage(hWndToolbar, TB_ADDBUTTONS, (WPARAM)numButtons, (LPARAM)&tbButtons);
+
+	// Resize the toolbar, and then show it.
+	SendMessage(hWndToolbar, TB_AUTOSIZE, 0, 0);
+	ShowWindow(hWndToolbar, TRUE);
+
+	return hWndToolbar;
 }
