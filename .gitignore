@@ -27,3 +27,11 @@
 *.exe
 *.out
 *.app
+Debug/*
+Release/*
+*/Debug/*
+*/Release/*
+*/x64/*
+ipch/*
+*.db
+*.opendb
