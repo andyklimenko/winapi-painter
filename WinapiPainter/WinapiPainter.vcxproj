@@ -71,15 +71,23 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir)Controller;$(ProjectDir);$(ProjectDir)View;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)Controller;$(ProjectDir)View;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(ProjectDir)Controller;$(ProjectDir);$(ProjectDir)View;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)Controller;$(ProjectDir)View;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir)Controller;$(ProjectDir);$(ProjectDir)View;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)Controller;$(ProjectDir)View;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(ProjectDir)Controller;$(ProjectDir);$(ProjectDir)View;$(IncludePath)</IncludePath>
+    <SourcePath>$(ProjectDir)Controller;$(ProjectDir)View;$(SourcePath)</SourcePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -145,12 +153,16 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Controller\DrawerFactory.h" />
+    <ClInclude Include="DrawerFactory.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="View\BaseDrawer.h" />
     <ClInclude Include="WinapiPainter.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Controller\DrawerFactory.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>

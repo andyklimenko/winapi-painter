@@ -19,6 +19,12 @@
     <Filter Include="Source Files\View">
       <UniqueIdentifier>{d9c0ed97-652a-43dc-8d5f-9b3dc21b54f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Controller">
+      <UniqueIdentifier>{f6b2dee0-94db-4f2b-99d4-77f42b1e63e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Controller">
+      <UniqueIdentifier>{0f1480a5-25bb-4eb0-91d1-4d2cadae1f7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -36,6 +42,15 @@
     <ClInclude Include="WinapiPainter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="View\BaseDrawer.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawerFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Controller\DrawerFactory.h">
+      <Filter>Header Files\Controller</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -43,6 +58,9 @@
     </ClCompile>
     <ClCompile Include="WinapiPainter.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Controller\DrawerFactory.cpp">
+      <Filter>Source Files\Controller</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

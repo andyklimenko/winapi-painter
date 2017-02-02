@@ -35,3 +35,4 @@ Release/*
 ipch/*
 *.db
 *.opendb
+.vs/*
