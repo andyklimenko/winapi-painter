@@ -133,7 +133,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 std::shared_ptr<BaseDrawer> pDrawer;
-HDC g_Hdc = nullptr;
 bool capturingCursor = false;
 
 //
@@ -196,9 +195,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
         break;
-	case WM_CREATE:
-		g_Hdc = GetDC(hWnd);
-		break;
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
@@ -211,8 +207,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_DESTROY:
-		ReleaseDC(hWnd, g_Hdc);
-		g_Hdc = nullptr;
         PostQuitMessage(0);
         break;
 
