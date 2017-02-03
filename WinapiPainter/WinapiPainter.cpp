@@ -4,6 +4,7 @@
 #include "stdafx.h"
 #include "WinapiPainter.h"
 #include <CommCtrl.h>
+#include <commdlg.h>
 #include <memory>
 
 #include "Controller\DrawerFactory.h"
@@ -24,6 +25,7 @@ LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
 HWND CreateToolbarFromResource(HWND hWndParent);
+void DoSaveImage(HWND hwnd, LPCTSTR dest);
 
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
@@ -169,6 +171,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 			case ID_DRAW_ELLIPSE:
 				pDrawer.reset(DrawerFactory::CreateDrawer(EllipsePrimitive));
 				break;
+			case ID_FILE_SAVEAS:
+			{
+					OPENFILENAME ofn;
+					ZeroMemory(&ofn, sizeof(ofn));
+					ofn.lStructSize = sizeof(ofn);
+					ofn.hwndOwner = hWnd;
+					ofn.lpstrFilter = _T("Bitmap Files (*.bmp)\0*.bmp\0All Files (*.*)\0*.*\0");
+
+					TCHAR fileName[MAX_PATH] = {0, };
+					ofn.lpstrFile = (LPWSTR)fileName;
+					ofn.nMaxFile = MAX_PATH;
+					ofn.Flags = OFN_OVERWRITEPROMPT;
+					ofn.lpstrInitialDir = nullptr;
+					ofn.lpstrDefExt = (LPCWSTR)L"txt";
+					if (GetSaveFileName(&ofn) != FALSE)
+					{
+						DoSaveImage(hWnd, ofn.lpstrFile);
+					}
+				}
+				break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
@@ -225,6 +247,75 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
     return 0;
+}
+
+void DoSaveImage(HWND hwnd, LPCTSTR dest)
+{
+	// get screen rectangle
+	RECT windowRect;
+	GetClientRect(hwnd, &windowRect);
+
+	// bitmap dimensions
+	int bitmap_dx = windowRect.right - windowRect.left;
+	int bitmap_dy = windowRect.bottom - windowRect.top;
+
+	// create file
+	HANDLE hFile = CreateFile(dest,
+		GENERIC_WRITE,
+		0,
+		NULL,
+		CREATE_ALWAYS,
+		FILE_ATTRIBUTE_NORMAL, NULL);
+
+	// save bitmap file headers
+	BITMAPFILEHEADER fileHeader;
+	BITMAPINFOHEADER infoHeader;
+
+	fileHeader.bfType = 0x4d42;
+	fileHeader.bfSize = 0;
+	fileHeader.bfReserved1 = 0;
+	fileHeader.bfReserved2 = 0;
+	fileHeader.bfOffBits = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER);
+
+	infoHeader.biSize = sizeof(infoHeader);
+	infoHeader.biWidth = bitmap_dx;
+	infoHeader.biHeight = bitmap_dy;
+	infoHeader.biPlanes = 1;
+	infoHeader.biBitCount = 24;
+	infoHeader.biCompression = BI_RGB;
+	infoHeader.biSizeImage = 0;
+	infoHeader.biXPelsPerMeter = 0;
+	infoHeader.biYPelsPerMeter = 0;
+	infoHeader.biClrUsed = 0;
+	infoHeader.biClrImportant = 0;
+
+	DWORD dwBytesWritten = 0;
+	WriteFile(hFile, &fileHeader, sizeof(BITMAPFILEHEADER), &dwBytesWritten, nullptr);
+	WriteFile(hFile, &infoHeader, sizeof(BITMAPINFOHEADER), &dwBytesWritten, nullptr);
+
+	// dibsection information
+	BITMAPINFO info;
+	info.bmiHeader = infoHeader;
+
+	// ------------------
+	// THE IMPORTANT CODE
+	// ------------------
+	// create a dibsection and blit the window contents to the bitmap
+	HDC winDC = GetWindowDC(hwnd);
+	HDC memDC = CreateCompatibleDC(winDC);
+	BYTE* memory = 0;
+	HBITMAP bitmap = CreateDIBSection(winDC, &info, DIB_RGB_COLORS, (void**)&memory, 0, 0);
+	SelectObject(memDC, bitmap);
+	BitBlt(memDC, 0, 0, bitmap_dx, bitmap_dy, winDC, 0, 0, SRCCOPY);
+	DeleteDC(memDC);
+	ReleaseDC(hwnd, winDC);
+
+	// save dibsection data
+	int bytes = (((24 * bitmap_dx + 31) & (~31)) / 8)*bitmap_dy;
+	WriteFile(hFile, memory, bytes, &dwBytesWritten, nullptr);
+
+	CloseHandle(hFile);
+	DeleteObject(bitmap);
 }
 
 // Message handler for about box.
