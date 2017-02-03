@@ -1,13 +1,13 @@
 #pragma once
 
-#include <BaseDrawer.h>
-
 enum PrimitiveToDraw
 {
-	Line = 0,
+	LinePrimitive = 0,
 	EllipsePrimitive,
 	RectanglePrimitive
 };
+
+class BaseDrawer;
 
 /*
  * A factory designated to create drawer-objects

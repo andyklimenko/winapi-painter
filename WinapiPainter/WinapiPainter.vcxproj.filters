@@ -48,6 +48,9 @@
     <ClInclude Include="Controller\DrawerFactory.h">
       <Filter>Header Files\Controller</Filter>
     </ClInclude>
+    <ClInclude Include="View\LineDrawer.h">
+      <Filter>Header Files\View</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -58,6 +61,12 @@
     </ClCompile>
     <ClCompile Include="Controller\DrawerFactory.cpp">
       <Filter>Source Files\Controller</Filter>
+    </ClCompile>
+    <ClCompile Include="View\LineDrawer.cpp">
+      <Filter>Source Files\View</Filter>
+    </ClCompile>
+    <ClCompile Include="View\BaseDrawer.cpp">
+      <Filter>Source Files\View</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

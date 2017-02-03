@@ -4,6 +4,10 @@
 #include "stdafx.h"
 #include "WinapiPainter.h"
 #include <CommCtrl.h>
+#include <memory>
+
+#include "Controller\DrawerFactory.h"
+#include "View\BaseDrawer.h"
 
 #define MAX_LOADSTRING 100
 
@@ -126,6 +130,10 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
+std::shared_ptr<BaseDrawer> pDrawer;
+HDC g_Hdc = nullptr;
+bool capturingCursor = false;
+
 //
 //  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -152,24 +160,66 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case IDM_EXIT:
                 DestroyWindow(hWnd);
                 break;
+			case ID_DRAW_LINE:
+				pDrawer.reset(DrawerFactory::CreateDrawer(LinePrimitive));
+				break;
+			case ID_DRAW_RECTANGLE:
+				pDrawer.reset(DrawerFactory::CreateDrawer(RectanglePrimitive));
+				break;
+			case ID_DRAW_ELLIPSE:
+				pDrawer.reset(DrawerFactory::CreateDrawer(EllipsePrimitive));
+				break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
         }
         break;
+	case WM_CREATE:
+		g_Hdc = GetDC(hWnd);
+		break;
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Add any drawing code that uses hdc here...
+			if (pDrawer)
+			{
+				pDrawer->Draw(hdc);
+			}
             EndPaint(hWnd, &ps);
         }
         break;
     case WM_DESTROY:
+		ReleaseDC(hWnd, g_Hdc);
+		g_Hdc = nullptr;
         PostQuitMessage(0);
         break;
-	case WM_CREATE:
-		
+
+	case WM_LBUTTONDOWN:
+		if (pDrawer)
+		{
+			POINT pt;
+			GetCursorPos(&pt);
+			ScreenToClient(hWnd, &pt);
+			pDrawer->setFrom(pt);
+			capturingCursor = true;
+		}
+
+		break;
+	case WM_LBUTTONUP:
+		if (pDrawer && capturingCursor)
+		{
+			capturingCursor = false;
+			InvalidateRect(hWnd, nullptr, FALSE);
+		}
+		break;
+	case WM_MOUSEMOVE:
+		if (pDrawer && capturingCursor)
+		{
+			POINT pt;
+			GetCursorPos(&pt);
+			ScreenToClient(hWnd, &pt);
+			pDrawer->setTo(pt);
+		}
 		break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);

@@ -9,9 +9,14 @@
 class BaseDrawer
 {
 public:
-	BaseDrawer() {};
-	virtual ~BaseDrawer() {};
+	BaseDrawer();
+	virtual ~BaseDrawer();
 
+public:
+	void Draw(HDC hdc);
+	void setFrom(const POINT from);
+	void setTo(const POINT to);
+protected:
 	/*
 	 * A method to be implemented for drawing concrete primitive in an 
 	 * imaginary rectangle specified with two given points
@@ -19,6 +24,10 @@ public:
 	 *  |                    |
 	 *  |-------------------to
 	 */
-	virtual void Draw(const PPOINT from, const PPOINT to) = 0;
+	virtual void Draw(HDC hdc, const POINT from, const POINT to) = 0;
+
+private:
+	POINT m_From;
+	POINT m_To;
 };
 
