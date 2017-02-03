@@ -181,11 +181,6 @@
     <Image Include="..\res\ellipse.ico" />
     <Image Include="..\res\line.ico" />
     <Image Include="..\res\rect.ico" />
-    <Image Include="..\res\toolbar.bmp" />
-    <Image Include="icon1.ico" />
-    <Image Include="icon_line.ico" />
-    <Image Include="icon_rect.ico" />
-    <Image Include="small.ico" />
     <Image Include="WinapiPainter.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -66,19 +66,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="WinapiPainter.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="icon1.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="icon_line.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="icon_rect.ico">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\res\ellipse.ico">
@@ -88,9 +76,6 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="..\res\rect.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
-    <Image Include="..\res\toolbar.bmp">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
