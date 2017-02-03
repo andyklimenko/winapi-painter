@@ -163,6 +163,7 @@
     <ClInclude Include="targetver.h" />
     <ClInclude Include="View\BaseDrawer.h" />
     <ClInclude Include="View\LineDrawer.h" />
+    <ClInclude Include="View\RectDrawer.h" />
     <ClInclude Include="WinapiPainter.h" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +176,7 @@
     </ClCompile>
     <ClCompile Include="View\BaseDrawer.cpp" />
     <ClCompile Include="View\LineDrawer.cpp" />
+    <ClCompile Include="View\RectDrawer.cpp" />
     <ClCompile Include="WinapiPainter.cpp" />
   </ItemGroup>
   <ItemGroup>
