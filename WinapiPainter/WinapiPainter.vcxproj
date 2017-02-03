@@ -162,6 +162,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="View\BaseDrawer.h" />
+    <ClInclude Include="View\EllipseDrawer.h" />
     <ClInclude Include="View\LineDrawer.h" />
     <ClInclude Include="View\RectDrawer.h" />
     <ClInclude Include="WinapiPainter.h" />
@@ -175,6 +176,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="View\BaseDrawer.cpp" />
+    <ClCompile Include="View\EllipseDrawer.cpp" />
     <ClCompile Include="View\LineDrawer.cpp" />
     <ClCompile Include="View\RectDrawer.cpp" />
     <ClCompile Include="WinapiPainter.cpp" />

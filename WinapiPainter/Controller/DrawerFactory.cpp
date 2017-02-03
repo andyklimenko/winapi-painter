@@ -2,7 +2,7 @@
 
 #include "LineDrawer.h"
 #include "RectDrawer.h"
-
+#include "EllipseDrawer.h"
 #include "DrawerFactory.h"
 
 BaseDrawer * DrawerFactory::CreateDrawer(PrimitiveToDraw primitive)
@@ -14,6 +14,7 @@ BaseDrawer * DrawerFactory::CreateDrawer(PrimitiveToDraw primitive)
 	case RectanglePrimitive:
 		return new RectDrawer();
 	case EllipsePrimitive:
+		return new EllipseDrawer();
 	default:
 		break;
 	}
